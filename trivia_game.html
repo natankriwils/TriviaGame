@@ -1,271 +1,300 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Trivia Game</title>
+<!DOCTYPE html>  <html lang="en">  
+<head>  
+    <meta charset="UTF-8">  
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">  
+    <title>Trivia Game</title>  <style>  
+    body {  
+        font-family: Arial, sans-serif;  
+        background: #0a0a23;  
+        color: #fff;  
+        margin: 0;  
+        display: flex;  
+        justify-content: center;  
+        align-items: center;  
+        height: 100vh;  
+    }  
 
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background: #0a0a23;
-            color: #fff;
-            margin: 0;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-        }
+    #loadingScreen {  
+        position: absolute;  
+        top: 0; left: 0;  
+        width: 100%; height: 100%;  
+        background: #0a0a23;  
+        display: flex;  
+        justify-content: center;  
+        align-items: center;  
+        flex-direction: column;  
+        animation: fadeOut 0.5s forwards;  
+        animation-delay: 3s;  
+    }  
 
-        #loadingScreen {
-            position: absolute;
-            top: 0; left: 0;
-            width: 100%; height: 100%;
-            background: #0a0a23;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            flex-direction: column;
-            animation: fadeOut 0.5s forwards;
-            animation-delay: 3s;
-        }
+    .load-bar {  
+        width: 200px;  
+        height: 18px;  
+        border-radius: 10px;  
+        background: #1a1a3a;  
+        overflow: hidden;  
+        border: 2px solid #4caf50;  
+    }  
 
-        .load-bar {
-            width: 200px;
-            height: 18px;
-            border-radius: 10px;
-            background: #1a1a3a;
-            overflow: hidden;
-            border: 2px solid #4caf50;
-        }
+    .load-fill {  
+        width: 0%;  
+        height: 100%;  
+        background: #4caf50;  
+        animation: loadingAnim 3s linear forwards;  
+    }  
 
-        .load-fill {
-            width: 0%;
-            height: 100%;
-            background: #4caf50;
-            animation: loadingAnim 3s linear forwards;
-        }
+    @keyframes loadingAnim {  
+        0% { width: 0%; }  
+        100% { width: 100%; }  
+    }  
 
-        @keyframes loadingAnim {
-            0% { width: 0%; }
-            100% { width: 100%; }
-        }
+    @keyframes spin {  
+        to { transform: rotate(360deg); }  
+    }  
 
-        @keyframes spin {
-            to { transform: rotate(360deg); }
-        }
+    #menu {  
+        display: none;  
+        flex-direction: column;  
+        text-align: center;  
+    }  
 
-        #menu {
-            display: none;
-            flex-direction: column;
-            text-align: center;
-        }
+    .frame {  
+        background: #1a1a3a;  
+        padding: 40px 50px;  
+        border-radius: 12px;  
+        width: 350px;  
+        text-align: center;  
+        box-shadow: 0 0 10px rgba(0,0,0,0.5);  
+        display: flex;  
+        flex-direction: column;  
+        align-items: center;  
+    }  
 
-        .frame {
-            background: #1a1a3a;
-            padding: 40px 50px;
-            border-radius: 12px;
-            width: 350px;
-            text-align: center;
-            box-shadow: 0 0 10px rgba(0,0,0,0.5);
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-        }
+    .menu-btn {  
+        width: 200px;  
+        padding: 12px;  
+        margin: 10px auto;  
+        font-size: 18px;  
+        border: none;  
+        border-radius: 10px;  
+        background: #2196f3;  
+        color: white;  
+        cursor: pointer;  
+    }  
 
-        .menu-btn {
-            width: 200px;
-            padding: 12px;
-            margin: 10px auto;
-            font-size: 18px;
-            border: none;
-            border-radius: 10px;
-            background: #2196f3;
-            color: white;
-            cursor: pointer;
-        }
+    .menu-btn:hover {  
+        background: #1976d2;  
+    }  
 
-        .menu-btn:hover {
-            background: #1976d2;
-        }
+   .table {  
+        background: #1a1a3a;  
+        padding: 20px 30px;  
+        border-radius: 12px;  
+        width: 350px;  
+        text-align: center;  
+        display: none;  
+        box-shadow: 0 0 10px rgba(0,0,0,0.5);  
+        flex-direction: column;  
+        align-items: center;  
+    }  
 
-       .table {
-            background: #1a1a3a;
-            padding: 20px 30px;
-            border-radius: 12px;
-            width: 350px;
-            text-align: center;
-            display: none;
-            box-shadow: 0 0 10px rgba(0,0,0,0.5);
-            flex-direction: column;
-            align-items: center;
-        }
+    button {  
+        width: 100%;  
+        margin: 10px 0;  
+        padding: 10px;  
+        border: none;  
+        border-radius: 8px;  
+        background: #4caf50;  
+        color: #fff;  
+        cursor: pointer;  
+        font-size: 16px;  
+    }  
 
-        button {
-            width: 100%;
-            margin: 10px 0;
-            padding: 10px;
-            border: none;
-            border-radius: 8px;
-            background: #4caf50;
-            color: #fff;
-            cursor: pointer;
-            font-size: 16px;
-        }
+    button:hover { background: #45a049; }  
 
-        button:hover { background: #45a049; }
+    #nextBtn {  
+        display: none;  
+        margin-top: 20px;  
+        background: #2196f3;  
+    }  
+    #nextBtn:hover {  
+        background: #1976d2;  
+    }  
 
-        #nextBtn {
-            display: none;
-            margin-top: 20px;
-            background: #2196f3;
-        }
-        #nextBtn:hover {
-            background: #1976d2;
-        }
+    #backBtn {  
+        margin-top: 18px;  
+        background:#f44336;  
+        display: none;  
+    }  
+  
+.correct {  
+background: #4caf50 !important;  
+animation: correctAnim 0.5s ease;  
+transform: scale(1.08);
 
-        #backBtn {
-            margin-top: 18px;
-            background:#f44336;
-            display: none;
-        }
+}
 
-    </style>
-</head>
+@keyframes correctAnim {
+0% { box-shadow: 0 0 0px #4caf50; }
+50% { box-shadow: 0 0 12px #4caf50; }
+100% { box-shadow: 0 0 0px #4caf50; }
+}
 
-<body>
-    <div id="loadingScreen">
-    <div class="load-bar">
-        <div class="load-fill"></div>
-    </div>
-    <p style="margin-top: 15px; font-size: 18px;">Loading...</p>
+.wrong {
+background: #8b1e1e !important;
+}
+
+</style>
+
+</head>  <body>  
+    <div id="loadingScreen">  
+    <div class="load-bar">  
+        <div class="load-fill"></div>  
+    </div>  
+    <p style="margin-top: 15px; font-size: 18px;">Loading...</p>  
+</div>  <div id="menu" class="frame">  
+    <h1>Trivia Game</h1>  
+    <button class="menu-btn" onclick="startGame()">START</button>  
+    <button class="menu-btn" onclick="exitGame()">EXIT</button>  
+</div>  
+
+<div class="table" id="gameTable">  
+    <h2>Trivia Game</h2>  
+    <p id="question">Loading...</p>  
+    <div id="answers"></div>  
+    <button id="nextBtn">Next Question</button>  
+    <p id="score">Score: 0</p>  
+
+    <button id="backBtn">  
+    Back to Menu  
+    </button>  
 </div>
 
-    <div id="menu" class="frame">
-        <h1>Trivia Game</h1>
-        <button class="menu-btn" onclick="startGame()">START</button>
-        <button class="menu-btn" onclick="exitGame()">EXIT</button>
-    </div>
+<script>  
+    setTimeout(() => {  
+        document.getElementById("loadingScreen").style.display = "none";  
+        document.getElementById("menu").style.display = "flex";  
+    }, 3000);  
+  
+    function startGame() {  
+        document.getElementById("menu").style.display = "none";  
+        document.getElementById("gameTable").style.display = "flex";  
+        loadQuestion();  
+    }  
+  
+    function exitGame() {  
+        alert("Thank you!!");  
+        window.close();  
+    }  
+  
+    const questions = [  
+    {  
+        q: "Apa ibu kota Indonesia?",  
+        options: ["Bandung", "Jakarta", "Surabaya", "Medan"],  
+        answer: 1  
+    },  
+    {  
+        q: "Berapa hasil 7 x 6?",  
+        options: ["42", "46", "36", "40"],  
+        answer: 0  
+    },  
+    {  
+        q: "Siapa pencipta bahasa pemrograman JavaScript?",  
+        options: ["Bill Gates", "Elon Musk", "Brendan Eich", "Dennis Ritchie"],  
+        answer: 2  
+    },  
+    {  
+        q: "Berapa planet di tata surya kita?",  
+        options: ["7", "8", "9", "10"],  
+        answer: 1  
+    },  
+    {  
+        q: "Natan sayang sama siapa?",  
+        options: ["Aku", "Kamu", "Saila", "Ceng"],  
+        answer: 0,   
+    }  
+];  
+  
+    let current = 0;  
+    let score = 0;  
+  
+    const questionEl = document.getElementById('question');  
+    const answersEl = document.getElementById('answers');  
+    const nextBtn = document.getElementById('nextBtn');  
+    const scoreEl = document.getElementById('score');  
+    const backBtn = document.getElementById('backBtn');  
+  
+  
+    function loadQuestion() {  
+    const q = questions[current];  
+    questionEl.textContent = q.q;  
+    answersEl.innerHTML = '';  
+    nextBtn.style.display = 'none';  
+  
+    q.options.forEach((opt, idx) => {  
+        const btn = document.createElement('button');  
+        btn.textContent = opt;  
+  
+        btn.classList.remove("correct", "wrong");  
+  
+        btn.onclick = () => selectAnswer(idx);  
+        answersEl.appendChild(btn);  
+    });  
+}  
+  
+    function selectAnswer(idx) {  
+    const correct = questions[current].answer;  
+    const buttons = answersEl.querySelectorAll('button');  
+  
+    if (current === questions.length - 1) {
 
-    <div class="table" id="gameTable">
-        <h2>Trivia Game</h2>
-        <p id="question">Loading...</p>
-        <div id="answers"></div>
-        <button id="nextBtn">Next Question</button>
-        <p id="score">Score: 0</p>
+    buttons.forEach((btn) => {
+        btn.disabled = true;
 
-        <button id="backBtn">
-        Back to Menu
-        </button>
-    </div>
+        btn.classList.remove("correct", "wrong");
 
-<script>
-    setTimeout(() => {
-        document.getElementById("loadingScreen").style.display = "none";
-        document.getElementById("menu").style.display = "flex";
-    }, 3000);
+        btn.classList.add("correct");
+    });
 
-    function startGame() {
-        document.getElementById("menu").style.display = "none";
-        document.getElementById("gameTable").style.display = "flex";
-        loadQuestion();
-    }
+    score++;
+    scoreEl.textContent = `Score: ${score}`;
+    nextBtn.style.display = 'block';
+    return;
+}
+  
+    buttons.forEach((btn, i) => {
+    btn.disabled = true;
+    btn.classList.remove("correct", "wrong");
 
-    function exitGame() {
-        alert("Terima kasih sudah bermain!");
-        window.close();
-    }
-
-    const questions = [
-    {
-        q: "Apa ibu kota Indonesia?",
-        options: ["Bandung", "Jakarta", "Surabaya", "Medan"],
-        answer: 1
-    },
-    {
-        q: "Berapa hasil 7 x 6?",
-        options: ["42", "46", "36", "40"],
-        answer: 0
-    },
-    {
-        q: "Siapa pencipta bahasa pemrograman JavaScript?",
-        options: ["Bill Gates", "Elon Musk", "Brendan Eich", "Dennis Ritchie"],
-        answer: 2
-    },
-    {
-        q: "Berapa planet di tata surya kita?",
-        options: ["7", "8", "9", "10"],
-        answer: 1
-    },
-    {
-        q: "Natan sayang sama siapa?",
-        options: ["Aku", "Kamu", "Saila", "Ceng"],
-        answer: 0, 
-    }
-];
-
-    let current = 0;
-    let score = 0;
-
-    const questionEl = document.getElementById('question');
-    const answersEl = document.getElementById('answers');
-    const nextBtn = document.getElementById('nextBtn');
-    const scoreEl = document.getElementById('score');
-    const backBtn = document.getElementById('backBtn');
-
-
-    function loadQuestion() {
-        const q = questions[current];
-        questionEl.textContent = q.q;
-        answersEl.innerHTML = '';
-        nextBtn.style.display = 'none';
-
-        q.options.forEach((opt, idx) => {
-            const btn = document.createElement('button');
-            btn.textContent = opt;
-            btn.onclick = () => selectAnswer(idx);
-            answersEl.appendChild(btn);
-        });
-    }
-
-    function selectAnswer(idx) {
-        const correct = questions[current].answer;
-        const buttons = answersEl.querySelectorAll('button');
-
-        buttons.forEach((btn, i) => {
-            btn.disabled = true;
-            if (i === correct) btn.style.background = '#4caf50';
-            else if (i === idx) btn.style.background = '#e53935';
-        });
-
-        if (idx === correct) score++;
-        scoreEl.textContent = `Score: ${score}`;
-
-        nextBtn.style.display = 'block';
-    }
-
-    nextBtn.onclick = () => {
-        current++;
-        if (current < questions.length) {
-            loadQuestion();
-        } else {
-            questionEl.textContent = "Game finish!!";
-            answersEl.innerHTML = '';
-            nextBtn.style.display = 'none';
-            backBtn.style.display = 'block';
-        }
-    };
-
-    backBtn.onclick = () => {
-    current = 0;
-    score = 0;
-    scoreEl.textContent = "Score: 0";
-    backBtn.style.display = "none";
-    document.getElementById("gameTable").style.display = "none";
-    document.getElementById("menu").style.display = "flex";
-};
-
-</script>
-
-</body>
+    if (i === correct) btn.classList.add("correct");
+    else if (i === idx) btn.classList.add("wrong");
+});
+  
+    if (idx === correct) score++;  
+    scoreEl.textContent = `Score: ${score}`;  
+    nextBtn.style.display = 'block';  
+}  
+  
+    nextBtn.onclick = () => {  
+        current++;  
+        if (current < questions.length) {  
+            loadQuestion();  
+        } else {  
+            questionEl.textContent = "Game finish!!";  
+            answersEl.innerHTML = '';  
+            nextBtn.style.display = 'none';  
+            backBtn.style.display = 'block';  
+        }  
+    };  
+  
+    backBtn.onclick = () => {  
+    current = 0;  
+    score = 0;  
+    scoreEl.textContent = "Score: 0";  
+    backBtn.style.display = "none";  
+    document.getElementById("gameTable").style.display = "none";  
+    document.getElementById("menu").style.display = "flex";  
+};  
+  
+</script>  </body>  
 </html>
